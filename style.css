@@ -1,0 +1,135 @@
+:root {
+  --bg: #05060a;
+  --ivory: #f3f1ea;
+  --gold: #c9a876;
+  --steel: #888d97;
+  --hairline: rgba(243, 241, 234, 0.1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--ivory);
+  font-weight: 300;
+}
+
+.f-display {
+  font-family: "Space Grotesk", sans-serif;
+}
+.f-mono {
+  font-family: "JetBrains Mono", monospace;
+}
+
+::selection {
+  background: rgba(201, 168, 118, 0.3);
+  color: #fff;
+}
+
+/* ---------- starfield ---------- */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse 70% 55% at 50% -8%,
+    rgba(201, 168, 118, 0.07),
+    transparent 60%
+  );
+}
+.star-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  border-radius: 50%;
+}
+.star-layer--a {
+  animation: twinkle 7s ease-in-out infinite;
+}
+.star-layer--b {
+  animation: twinkle 11s ease-in-out infinite reverse;
+  opacity: 0.55;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ---------- hero ring (signature element) ---------- */
+.hero-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1100px, 150vw);
+  height: min(1100px, 150vw);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: spin-slow 160s linear infinite;
+  opacity: 0.55;
+}
+@keyframes spin-slow {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #1c1e24; border-radius: 4px; }
+
+a:focus-visible, button:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ---------- scroll reveal ---------- */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; }
+  .reveal-on-scroll {
+    transition: opacity 0.01s linear !important;
+    transform: none !important;
+  }
+  .hero-ring { animation: none !important; }
+}
