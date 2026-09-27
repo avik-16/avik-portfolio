@@ -21,6 +21,36 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Hidden SVG filter that makes overlapping blobs below melt into
+       each other with soft, liquid edges — the "goo" effect. -->
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+      <filter id="goo-filter">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur" />
+        <feColorMatrix
+          in="blur"
+          mode="matrix"
+          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11"
+          result="goo"
+        />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Ambient drifting nebula blobs (behind everything, very low opacity) -->
+  <div class="goo-field" aria-hidden="true">
+    <div class="goo-blob goo-blob--1"></div>
+    <div class="goo-blob goo-blob--2"></div>
+    <div class="goo-blob goo-blob--3"></div>
+    <div class="goo-blob goo-blob--4"></div>
+  </div>
+
+  <!-- Soft light that follows the cursor on desktop -->
+  <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+
+  <!-- Edge darkening for a cinematic, lens-like frame -->
+  <div class="vignette" aria-hidden="true"></div>
   <div class="starfield" aria-hidden="true">
     <div class="star-layer star-layer--a" id="star-layer-a"></div>
     <div class="star-layer star-layer--b" id="star-layer-b"></div>
@@ -39,20 +69,27 @@
           <a href="#about" class="link-underline f-mono text-[10.5px] tracking-[0.2em] uppercase text-[var(--steel)] hover:text-[var(--ivory)] transition-colors">About</a>
           <a href="#contact" class="link-underline f-mono text-[10.5px] tracking-[0.2em] uppercase text-[var(--steel)] hover:text-[var(--ivory)] transition-colors">Contact</a>
         </div>
-        <a href="https://linkedin.com/in/avik-rajeev-babu" target="_blank" rel="noreferrer" class="link-underline hidden md:inline-flex items-center gap-1.5 f-mono text-[10.5px] tracking-[0.2em] uppercase text-[var(--gold)]">Hire Me</a>
+        <a href="https://linkedin.com/in/avik-rajeev-babu" target="_blank" rel="noreferrer" class="link-underline link-glow hidden md:inline-flex items-center gap-1.5 f-mono text-[10.5px] tracking-[0.2em] uppercase text-[var(--gold)] px-3 py-1.5">Hire Me</a>
       </div>
     </nav>
 
     <!-- ============ HERO ============ -->
     <section id="top" class="relative min-h-screen flex flex-col justify-center pt-16 overflow-hidden">
-      <svg class="hero-ring" viewBox="0 0 400 400" aria-hidden="true">
-        <ellipse cx="200" cy="200" rx="180" ry="60" fill="none" stroke="url(#ringGrad)" stroke-width="0.6" />
-        <ellipse cx="200" cy="200" rx="140" ry="46" fill="none" stroke="url(#ringGrad)" stroke-width="0.4" />
+      <svg class="hero-ring hero-ring-pulse" viewBox="0 0 400 400" aria-hidden="true">
+        <ellipse cx="200" cy="200" rx="182" ry="61" fill="none" stroke="url(#ringGradGold)" stroke-width="0.7" />
+        <ellipse cx="197" cy="199" rx="182" ry="61" fill="none" stroke="url(#ringGradFrost)" stroke-width="0.4" />
+        <ellipse cx="200" cy="200" rx="140" ry="46" fill="none" stroke="url(#ringGradGold)" stroke-width="0.4" />
+        <ellipse cx="200" cy="200" rx="102" ry="33" fill="none" stroke="url(#ringGradFrost)" stroke-width="0.3" />
         <defs>
-          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="0">
+          <linearGradient id="ringGradGold" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stop-color="#C9A876" stop-opacity="0" />
-            <stop offset="50%" stop-color="#C9A876" stop-opacity="0.7" />
+            <stop offset="50%" stop-color="#C9A876" stop-opacity="0.8" />
             <stop offset="100%" stop-color="#C9A876" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="ringGradFrost" x1="1" y1="0" x2="0" y2="0">
+            <stop offset="0%" stop-color="#9DB4C9" stop-opacity="0" />
+            <stop offset="50%" stop-color="#9DB4C9" stop-opacity="0.55" />
+            <stop offset="100%" stop-color="#9DB4C9" stop-opacity="0" />
           </linearGradient>
         </defs>
       </svg>
@@ -67,7 +104,7 @@
 
         <div class="reveal-on-scroll" style="transition-delay:80ms">
           <h1 class="f-display text-[13vw] md:text-[5.6rem] leading-[1.02] font-light tracking-tight">
-            Avik Rajeev<br />
+            <span class="shimmer-text">Avik Rajeev</span><br />
             <span class="text-[var(--steel)]">Babu</span>
           </h1>
         </div>
@@ -81,7 +118,7 @@
 
         <div class="reveal-on-scroll" style="transition-delay:220ms">
           <div class="flex flex-wrap items-center gap-x-8 gap-y-3 mt-9">
-            <a href="#missions" class="link-underline flex items-center gap-1.5 f-mono text-[11px] tracking-[0.18em] uppercase text-[var(--gold)]">
+            <a href="#missions" class="link-underline link-glow flex items-center gap-1.5 f-mono text-[11px] tracking-[0.18em] uppercase text-[var(--gold)] px-3 py-1.5">
               View Projects <i data-lucide="arrow-up-right" style="width:12px;height:12px"></i>
             </a>
             <div id="hero-social" class="contents"></div>
