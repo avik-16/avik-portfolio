@@ -208,6 +208,37 @@ function initReveal() {
   els.forEach((el) => observer.observe(el));
 }
 
+// ---------- cursor glow ----------
+// A soft light that trails the mouse on desktop. Skipped entirely on
+// touch devices and when the user prefers reduced motion.
+function initCursorGlow() {
+  const glow = document.getElementById("cursor-glow");
+  if (!glow) return;
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (prefersReducedMotion || !hasFinePointer) return;
+
+  let raf = null;
+  let targetX = window.innerWidth / 2;
+  let targetY = window.innerHeight / 2;
+
+  window.addEventListener("mousemove", (e) => {
+    targetX = e.clientX;
+    targetY = e.clientY;
+    if (!glow.classList.contains("is-active")) glow.classList.add("is-active");
+    if (raf === null) {
+      raf = requestAnimationFrame(() => {
+        glow.style.setProperty("--cx", `${targetX}px`);
+        glow.style.setProperty("--cy", `${targetY}px`);
+        raf = null;
+      });
+    }
+  });
+
+  window.addEventListener("mouseleave", () => glow.classList.remove("is-active"));
+}
+
 // ---------- boot ----------
 document.addEventListener("DOMContentLoaded", () => {
   renderStarfield();
@@ -225,6 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Reveal-on-scroll must run AFTER the dynamic content above exists,
   // since it needs to find the .reveal-on-scroll elements in the DOM.
   initReveal();
+  initCursorGlow();
 
   // Lucide icons are inserted as <i data-lucide="..."> placeholders;
   // this call turns them into actual inline SVG icons.
